@@ -12,15 +12,15 @@ using WampSharp.V2.Core.Contracts;
 
 namespace WampSharp.Tests.Wampv2.Client.Callee
 {
-    public class InvocationCalleeeTest : InvocationCalleeeTest<JToken>
+    public class InvocationCalleeTest : InvocationCalleeTest<JToken>
     {
-        public InvocationCalleeeTest(long registrationId)
+        public InvocationCalleeTest(long registrationId)
             : base(registrationId, new JTokenJsonBinding(), new JTokenEqualityComparer())
         {
         }
     }
 
-    public class InvocationCalleeeTest<TMessage> : CalleeTest<TMessage>
+    public class InvocationCalleeTest<TMessage> : CalleeTest<TMessage>
     {
         private readonly DealerMock mDealer = new DealerMock();
         private readonly OperationMock mOperation = new OperationMock();
@@ -30,7 +30,7 @@ namespace WampSharp.Tests.Wampv2.Client.Callee
         private Action<IWampCallee> mInvocationAction;
         private readonly long mRegistrationId;
 
-        public InvocationCalleeeTest(long registrationId, IWampBinding<TMessage> binding, IEqualityComparer<TMessage> equalityComparer) : base(binding, equalityComparer)
+        public InvocationCalleeTest(long registrationId, IWampBinding<TMessage> binding, IEqualityComparer<TMessage> equalityComparer) : base(binding, equalityComparer)
         {
             mRegistrationId = registrationId;
         }
@@ -56,8 +56,8 @@ namespace WampSharp.Tests.Wampv2.Client.Callee
         public void SetupInvocation(long requestId, long registrationId, InvocationDetails details)
         {
             ExpectedInvocation = new[] {details};
-            
-            mInvocationAction = 
+
+            mInvocationAction =
                 callee => callee.Invocation(requestId, registrationId, details);
         }
 
@@ -130,7 +130,7 @@ namespace WampSharp.Tests.Wampv2.Client.Callee
             WampClientPlayground playground = new WampClientPlayground();
 
             IWampCallee calleeProxy = null;
-            
+
             mDealer.SetRegisterCallback((callee, requestId) =>
                 {
                     calleeProxy = callee;
@@ -142,7 +142,7 @@ namespace WampSharp.Tests.Wampv2.Client.Callee
 
             channel.Open();
 
-            Task register = 
+            Task register =
                 channel.RealmProxy.RpcCatalog.Register(mOperation, new RegisterOptions());
 
             mInvocationAction(calleeProxy);
@@ -158,7 +158,7 @@ namespace WampSharp.Tests.Wampv2.Client.Callee
             {
                 CompareParameters(this.ExpectedYield,
                                   mDealer.ActualYield,
-                                  "yield");                
+                                  "yield");
             }
 
             if (this.ExpectedError != null)
